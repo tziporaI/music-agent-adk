@@ -1,9 +1,9 @@
-# music-agent-adk
-AI-powered music recommender built with Google ADK and Gemini — understands your mood, favorite genres, or artists and responds with tailored tracks via the Deezer API.  
-
 # Music Recommendation Agent (ADK + LLM + Deezer)
 
 Welcome to the Music Agent – a conversational AI agent that recommends music based on **genre**, **artist**, or **mood** using **Deezer's API**, built with **Google's Agent Development Kit (ADK)** and powered by **LLMs**.
+
+# music-agent-adk
+AI-powered music recommender built with Google ADK and Gemini — understands your mood, favorite genres, or artists and responds with tailored tracks via the Deezer API.  
 
 ## 🎯 Project Goal
 

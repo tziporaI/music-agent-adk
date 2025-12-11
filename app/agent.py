@@ -1,10 +1,11 @@
-from google.adk.agents import Agent
-from .music_tools import search_by_mood_with_genre_fallback, search_by_genre, search_by_artist
-
+from google.adk.agents.llm_agent import Agent
+from .tools.music_tools import search_by_mood_with_genre_fallback, search_by_genre, search_by_artist
+from dotenv import load_dotenv
+load_dotenv()
 
 root_agent = Agent(
     name="music_agent",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
 
     instruction=(
         "You are a friendly music recommendation agent.\n\n"

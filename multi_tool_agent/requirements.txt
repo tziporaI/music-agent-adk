@@ -1,3 +1,0 @@
-google-adk
-requests~=2.32.4
-python-dotenv~=1.1.0

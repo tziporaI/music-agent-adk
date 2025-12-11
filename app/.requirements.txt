@@ -1,0 +1,8 @@
+google-adk==1.6.1
+google-cloud-aiplatform
+google-cloud-logging
+google-cloud-storage
+google-genai
+python-dotenv
+requests
+

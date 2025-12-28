@@ -50,6 +50,7 @@ class AgentConfiguration:
     project_id: str | None = None
     location: str = "us-central1"
     staging_bucket: str | None = None
+    memory_bucket: str | None = None
 
     def __post_init__(self) -> None:
         """Load environment variables and validate required settings."""
@@ -78,7 +79,9 @@ class AgentConfiguration:
                 "Please set it in your .env file or run:\n"
                 "  gcloud config set project YOUR_PROJECT_ID"
             )
-
+        self.memory_bucket = os.environ.get("GOOGLE_CLOUD_MEMORY_BUCKET")
+        if not self.memory_bucket:
+            self.memory_bucket = f"{self.project_id}-agent-memory"
         # Set location (with validation)
         self.location = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
         if not self.location:
@@ -243,4 +246,5 @@ print(f"  Internal Name: {config.internal_agent_name}")
 print(f"  Model: {config.model}")
 print(f"  Project: {get_project_id()}")
 print(f"  Location: {config.location}")
+print(f"  Memory Bucket: {config.memory_bucket}")
 print("=" * 50)

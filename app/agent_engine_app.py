@@ -18,11 +18,11 @@ from opentelemetry.sdk.trace import TracerProvider, export
 from vertexai import agent_engines
 from vertexai.preview.reasoning_engines import AdkApp
 
-from app.agent import root_agent
-from app.config import config, get_deployment_config
-from app.utils.gcs import create_bucket_if_not_exists
-from app.utils.tracing import CloudTraceLoggingSpanExporter
-from app.utils.typing import Feedback
+from .agent import root_agent
+from .config import config, get_deployment_config
+from .utils.gcs import create_bucket_if_not_exists
+from .utils.tracing import CloudTraceLoggingSpanExporter
+from .utils.typing import Feedback
 
 
 class AgentEngineApp(AdkApp):

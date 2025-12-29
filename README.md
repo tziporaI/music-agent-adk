@@ -3,13 +3,6 @@
 
 ## 🎬 Live Demo (Production)
 
-Short demo video showing how the project interprets the **user’s intent**,  
-understands the meaning of each request, and **routes it to the appropriate tool**  
-to generate AI-powered music recommendations.  
-The project is deployed on **Vercel**, with the AI Agent running via **Agent Engine**.
-
-https://github.com/user-attachments/assets/6719b323-1a8c-4473-919e-58ec4c7ed803
-
 
 <div align="center">
 
@@ -22,6 +15,14 @@ https://github.com/user-attachments/assets/6719b323-1a8c-4473-919e-58ec4c7ed803
 **AI-Powered Music Recommendation Agent Built with Google ADK & Gemini**
 
 [Live Demo](https://music-agent-adk.vercel.app/) • [GitHub](https://github.com/tziporaI/music-agent-adk)
+
+
+Short demo video showing how the project interprets the **user’s intent**,  
+understands the meaning of each request, and **routes it to the appropriate tool**  
+to generate AI-powered music recommendations.  
+The project is deployed on **Vercel**, with the AI Agent running via **Agent Engine**.
+
+https://github.com/user-attachments/assets/6719b323-1a8c-4473-919e-58ec4c7ed803
 
 </div>
 

@@ -14,69 +14,47 @@
  * @param agentName - The technical name of the agent
  * @returns User-friendly title for the activity
  */
+/**
+ * Generates user-friendly event titles based on agent/tool names (Music Agent)
+ */
 export function getEventTitle(agentName: string): string {
-  // For single agent, focus on activity type rather than agent name
-  if (agentName === "goal_planning_agent") {
-    return "🎯 Planning Strategy";
+  const name = (agentName || "").toLowerCase();
+
+  // Main agent (common names)
+  if (name === "music_agent" || name.includes("music-agent") || name.includes("musicagent")) {
+    return "Music Agent";
   }
-  if (agentName.includes("plan") || agentName.includes("planning")) {
-    return "🎯 Planning Strategy";
+
+  // Tools (based on your repo's tools)
+  if (name.includes("search_by_artist") || name.includes("artist")) {
+    return "Searching by artist";
   }
-  if (agentName.includes("research") || agentName.includes("search")) {
-    return "🔍 Researching Information";
+
+  if (name.includes("search_by_genre") || name.includes("genre")) {
+    return "Searching by genre";
   }
-  if (agentName.includes("analysis") || agentName.includes("evaluating")) {
-    return "📊 Analyzing Content";
+
+  if (name.includes("search_by_mood") || name.includes("mood")) {
+    return "Matching mood to music";
   }
-  if (agentName.includes("writing") || agentName.includes("report")) {
-    return "✍️ Writing Response";
+
+  if (name.includes("search_music_api") || name.includes("search_music") || name.includes("deezer")) {
+    return "Searching tracks (Deezer)";
   }
-  return `Processing (${agentName || "AI Agent"})`;
+
+  // Common “steps” you may log in the UI
+  if (name.includes("history") || name.includes("memory") || name.includes("session")) {
+    return "Checking session history";
+  }
+
+  if (name.includes("format") || name.includes("table") || name.includes("html")) {
+    return "Formatting recommendations";
+  }
+
+  // Fallback
+  return `Processing (${agentName || "Music Agent"})`;
 }
 
-/**
- * Safely truncates data for logging purposes
- *
- * @param data - Data to truncate
- * @param maxLength - Maximum length before truncation (default: 200)
- * @returns Truncated data string
- */
-export function truncateForLogging(
-  data: string,
-  maxLength: number = 200
-): string {
-  return data.length > maxLength ? data.substring(0, maxLength) + "..." : data;
-}
-
-/**
- * Checks if a string represents valid JSON
- *
- * @param str - String to validate
- * @returns True if the string is valid JSON
- */
-export function isValidJSON(str: string): boolean {
-  try {
-    JSON.parse(str);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Formats function call information for display
- *
- * @param name - Function name
- * @param args - Function arguments
- * @returns Formatted display string
- */
-export function formatFunctionCall(
-  name: string,
-  args: Record<string, unknown>
-): string {
-  const argCount = Object.keys(args).length;
-  return `${name}(${argCount} argument${argCount !== 1 ? "s" : ""})`;
-}
 
 /**
  * Formats function response information for display

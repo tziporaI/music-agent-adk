@@ -1,6 +1,8 @@
 from google.adk.agents import Agent
 from datetime import datetime, timezone
+import google.genai.types as genai_types
 
+from google.adk.planners import BuiltInPlanner
 
 from .tools.music_tools import (
     search_by_mood_with_genre_fallback,
@@ -11,7 +13,10 @@ from .tools.music_tools import (
 
 root_agent = Agent(
     name="music_agent",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
+    planner=BuiltInPlanner(
+        thinking_config=genai_types.ThinkingConfig(include_thoughts=True)
+    ),
     instruction=f"""
 You are a friendly music recommendation agent that suggests songs based on mood, genre, artist, or song title.
 

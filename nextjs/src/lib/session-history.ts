@@ -108,18 +108,24 @@ export class AdkSessionService {
   /**
    * Lists all sessions for a user
    */
+   /**
+   * Lists all sessions for a user
+   */
   static async listSessions(userId: string): Promise<ListSessionsResponse> {
     const appName = getAdkAppName();
 
+    // 🔹 Agent Engine
     if (shouldUseAgentEngine()) {
-      // Agent Engine: Use v1beta1 sessions API
-      const endpoint = getEndpointForPath("", "sessions");
+      // Agent Engine: Use v1beta1 sessions API עם פילטר לפי user_id
+      const filter = encodeURIComponent(`user_id="${userId}"`);
+      const endpoint = getEndpointForPath(`?filter=${filter}`, "sessions");
 
       console.log(
         "🔗 [ADK SESSION SERVICE] Agent Engine listSessions request:",
         {
           endpoint,
           method: "GET",
+          userId,
         }
       );
 
@@ -138,39 +144,44 @@ export class AdkSessionService {
 
         const responseData = await response.json();
 
-        // Agent Engine sessions API returns sessions with 'name' field, need to extract ID
-        const rawSessions = responseData.sessions || responseData || [];
-        const sessions: AdkSession[] = rawSessions.map(
+        // נוודא שתמיד עובדים עם מערך
+        const rawSessions =
+          (Array.isArray(responseData?.sessions) && responseData.sessions) ||
+          (Array.isArray(responseData) && responseData) ||
+          [];
+
+        const sessions: AdkSession[] = (rawSessions as any[]).map(
           (session: {
             name?: string;
             createTime?: string;
             updateTime?: string;
             userId?: string;
+            [key: string]: any;
           }) => {
             // Extract session ID from name field: "projects/.../sessions/SESSION_ID"
-            const sessionId = session.name
-              ? session.name.split("/sessions/")[1]
-              : null;
+            const sessionName = session.name;
+            const sessionId =
+              sessionName && sessionName.includes("/sessions/")
+                ? sessionName.split("/sessions/")[1]
+                : sessionName ?? "";
 
             return {
               id: sessionId,
-              app_name: getAdkAppName(), // Add app_name for compatibility
-              user_id: session.userId,
+              app_name: appName, // לשמירה על התאמה לטייפ
+              user_id: session.userId ?? userId,
               state: null,
               last_update_time: session.updateTime || session.createTime,
-              // Keep original fields for reference
+              // נשמור את השדות המקוריים לדיבוג / שימוש עתידי
               name: session.name,
               createTime: session.createTime,
               updateTime: session.updateTime,
-            };
+            } as AdkSession;
           }
         );
 
         return {
-          sessions: Array.isArray(sessions) ? sessions : [],
-          sessionIds: Array.isArray(sessions)
-            ? sessions.map((session) => session.id)
-            : [],
+          sessions,
+          sessionIds: sessions.map((session) => session.id),
         };
       } catch (error) {
         console.error(
@@ -179,8 +190,11 @@ export class AdkSessionService {
         );
         throw error;
       }
-    } else {
-      // Local Backend: GET with path
+    }
+
+    // 🔹 Local Backend
+    else {
+      // Local Backend: GET עם userId במסלול – רק סשנים של המשתמש
       const endpoint = getEndpointForPath(
         `/apps/${appName}/users/${userId}/sessions`
       );
@@ -204,33 +218,34 @@ export class AdkSessionService {
           },
         });
 
-        console.log("📡 [ADK SESSION SERVICE] Local Backend response:", {
-          status: response.status,
-          statusText: response.statusText,
-          contentType: response.headers.get("content-type"),
-        });
-
         if (!response.ok) {
           throw new Error(`Failed to list sessions: ${response.statusText}`);
         }
 
-        const sessions: AdkSession[] = await response.json();
+        const responseData = await response.json();
 
-        console.log("✅ [ADK SESSION SERVICE] Local Backend success:", {
-          sessionsCount: sessions.length,
-          sessionIds: sessions.map((s) => s.id || "no-id"),
-        });
+        // גם כאן נוודא שתמיד יש מערך
+        const rawSessions =
+          (Array.isArray(responseData?.sessions) && responseData.sessions) ||
+          (Array.isArray(responseData) && responseData) ||
+          [];
+
+        const sessions: AdkSession[] = rawSessions as AdkSession[];
 
         return {
           sessions,
           sessionIds: sessions.map((session) => session.id),
         };
       } catch (error) {
-        console.error("❌ [ADK SESSION SERVICE] Local Backend error:", error);
+        console.error(
+          "❌ [ADK SESSION SERVICE] Local Backend listSessions error:",
+          error
+        );
         throw error;
       }
     }
   }
+
 
   /**
    * Lists all events for a specific session

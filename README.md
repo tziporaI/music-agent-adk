@@ -1,5 +1,16 @@
 # 🎵 Music Agent ADK
 
+
+## 🎬 Live Demo (Production)
+
+Short demo video showing how the project interprets the **user’s intent**,  
+understands the meaning of each request, and **routes it to the appropriate tool**  
+to generate AI-powered music recommendations.  
+The project is deployed on **Vercel**, with the AI Agent running via **Agent Engine**.
+
+https://github.com/user-attachments/assets/6719b323-1a8c-4473-919e-58ec4c7ed803
+
+
 <div align="center">
 
 ![Music Agent Banner](https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge)
